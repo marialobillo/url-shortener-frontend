@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react'
-import { LinkIcon, ClipboardIcon, CheckIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react';
+import { LinkIcon, ClipboardIcon, CheckIcon } from '@heroicons/react/24/outline';
 
-const API_BASE_URL = 'https://yurajazpsg.execute-api.eu-west-3.amazonaws.com/Prod';
+const API_BASE_URL = 'https://y4ymmabprh.execute-api.eu-west-3.amazonaws.com/Prod';
 
 interface ShortenResponse {
   shortCode: string;
@@ -25,18 +25,18 @@ export default function Home() {
     } catch {
       return false;
     }
-  }
+  };
 
-  const shortenUrl = async (event: React.FormEvent) => {
-    event?.preventDefault()
-
+  const shortenUrl = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
     if (!url.trim()) {
       setError('Please enter a URL');
       return;
     }
 
     if (!validateUrl(url)) {
-      setError('Please enter a valid URL (include http:// )');
+      setError('Please enter a valid URL (include http:// or https://)');
       return;
     }
 
@@ -59,29 +59,29 @@ export default function Home() {
 
       const data: ShortenResponse = await response.json();
       setShortUrl(data.shortUrl);
-    } catch {
-      setError('Something went wrong. Please try again.')
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(shortUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {
+    } catch (err) {
       console.error('Failed to copy to clipboard');
     }
-  }
+  };
 
   const reset = () => {
     setUrl('');
     setShortUrl('');
     setError('');
     setCopied(false);
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
